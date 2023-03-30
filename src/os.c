@@ -4,7 +4,7 @@
  * @Author: sueRimn
  * @Date: 2021-07-07 09:52:14
  * @LastEditors: Lance
- * @LastEditTime: 2023-03-30 16:37:51
+ * @LastEditTime: 2023-03-30 20:32:44
  */
 #include "os.h"
 #include "stdio.h"
@@ -20,7 +20,7 @@
 #include "device/local_time.h"
 
 /**********信号量/互斥锁等**********/
-pthread_rwlock_t rwlock; // 声明读写锁
+// pthread_rwlock_t rwlock; // 声明读写锁
 
 // pthread_rwlock_rdlock(&rwlock);
 // pthread_rwlock_unlock(&rwlock);
@@ -29,13 +29,13 @@ pthread_rwlock_t rwlock; // 声明读写锁
 // pthread_rwlock_unlock(&rwlock);
 
 /**********任务的函数声明**********/
-int thread_create(pthread_t *id, void *(*callback)(void *), void *arg, size_t ssize, int priority); // 线程创建
+int thread_create(pthread_t *id, void *(*callback)(void *), void *arg, size_t ssize); // 线程创建
+
 void OS_TEST_TASK(void);
 void OS_Control_CPU_TASK(void);
 
-pthread_t tcp_task_pid,
-    test_task_pid,
-    Monitoring_cpu_pid; // 线程pid
+pthread_t Monitoring_cpu_pid, // 线程pid
+    test_task_pid;
 
 #define Pthread_4MB_SIZE 4194304
 #define Pthread_8MB_SIZE 4194304 * 2
@@ -45,13 +45,12 @@ pthread_t tcp_task_pid,
 void OS_START(void) // 操作系统启动函数
 {
     int ret = 0;
-    int priority = 1;
 
-    ret = thread_create(&test_task_pid, NULL, (void *)OS_TEST_TASK, (size_t)NULL, priority++);
+    ret = thread_create(&test_task_pid, NULL, (void *)OS_TEST_TASK, (size_t)NULL);
     if (ret != 0)
         os_error(__FILE__, __LINE__);
 
-    ret = thread_create(&Monitoring_cpu_pid, NULL, (void *)OS_Control_CPU_TASK, (size_t)Pthread_4MB_SIZE, priority++);
+    ret = thread_create(&Monitoring_cpu_pid, NULL, (void *)OS_Control_CPU_TASK, (size_t)NULL);
     if (ret != 0)
         os_error(__FILE__, __LINE__);
 }
@@ -62,6 +61,7 @@ void OS_TEST_TASK(void)
     sleep(1);
     while (1)
     {
+        //OS_Control_CPU_TASK();
         sleep(10);
     }
 }
@@ -115,9 +115,8 @@ void OS_Control_CPU_TASK(void) // 获取当前CPU使用率后调用LED显示不�
         }
     }
 }
-int thread_create(pthread_t *id, void *(*callback)(void *), void *arg, size_t ssize, int priority)
+int thread_create(pthread_t *id, void *(*callback)(void *), void *arg, size_t ssize)
 {
-    struct sched_param param; // 设置优先级
     pthread_attr_t thread_attr;
     size_t stack_size;
     int err;
@@ -154,13 +153,9 @@ int thread_create(pthread_t *id, void *(*callback)(void *), void *arg, size_t ss
 
     printf("stack_size default is %dMB\r\n", stack_size / 1024 / 1024); // default is 8M BYTE
 
-    pthread_attr_setschedpolicy(&thread_attr, SCHED_RR);                // SCHED_RR实时调度策略，时间片轮转
-    param.sched_priority = priority;                                    // 设置优先级
-    pthread_attr_setschedparam(&thread_attr, &param);                   // 设置优先级
-    pthread_attr_setinheritsched(&thread_attr, PTHREAD_EXPLICIT_SCHED); // 要使优先级其作用必须要有这句话
-
     err = pthread_create((pthread_t *)id, &thread_attr, arg, callback);
     pthread_attr_destroy(&thread_attr);
 
     return err;
 }
+

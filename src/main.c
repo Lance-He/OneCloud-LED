@@ -4,7 +4,7 @@
  * @Author: Lance
  * @Date: 2021-07-07 09:52:14
  * @LastEditors: Lance
- * @LastEditTime: 2023-03-30 16:29:41
+ * @LastEditTime: 2023-03-30 19:57:37
  */
 #include <stdio.h>
 #include "os.h"
@@ -28,11 +28,11 @@ void judge_bigend_littleend(void);
 #if 1
 int main(int argc, char *argv[])
 {
-    sleep(10); //开启延迟10秒
+    //sleep(10); //开启延迟10秒
     if (argc != 3)
     {
         printf("Usage: %s <start time> <end time>\n", argv[0]);
-        printf("Time format: HH:MM:SS\nExample: ./led \"15:50:00\" \"15:51:00\"\n");
+        printf("Time format: HH:MM:SS\nExample: ./main \"15:50:00\" \"15:51:00\"\n");
         return 1;
     }
 

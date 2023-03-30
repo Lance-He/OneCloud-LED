@@ -1,3 +1,12 @@
+<!--
+ * @Descripttion: 
+ * @version: 1.0
+ * @Author: Lance
+ * @Date: 2023-03-30 17:01:59
+ * @LastEditors: Lance
+ * @LastEditTime: 2023-03-30 20:38:11
+ * @FilePath: /OneCloud/OneCloud-Control-Plan/README.md
+-->
 # OneCloud 设备 LED 控制程序
 
 
@@ -31,15 +40,16 @@
 
 1. 将 `/bin` 目录下的 `main` 文件复制到玩客云的用户目录下，例如 `/root/main`
 2. 启动方式：
-    cd /root/
-    ./main "16:35:00" "16:50:00"
+    `cd /root/`
+    `chmod +x main`
+    `./main "16:35:00" "16:50:00"`
 3. 使用 `Ctrl+C` 结束进程
 
 ### 设置开机自启
 
 1. 修改 `/etc/rc.local` 文件
 2. 在文件的 `exit 0` 之前插入以下内容：
-    /root/main "16:35:00" "16:50:00" &
+    `/root/main "16:35:00" "16:50:00" &`
 3. 保存即可
 
 ## 许可证
