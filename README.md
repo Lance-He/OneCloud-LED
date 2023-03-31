@@ -10,7 +10,7 @@
 # OneCloud 设备 LED 控制程序
 
 
-本项目为 OneCloud 设备提供一个自制的 LED 控制程序，基于 hzyitc 大佬的 Armbian 镜像开发，兼容大部分 Debian 系列发行版。让您轻松控制设备的 LED 状态。
+本项目为 玩客云OneCloud 设备提供一个自制的 LED 控制程序，基于 hzyitc 大佬的 Armbian 镜像开发，兼容大部分 Debian 系列发行版。让您轻松控制设备的 LED 状态。
 
 作者：Lance
 邮箱：hesiqi.china@gmail.com
